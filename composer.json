@@ -1,5 +1,5 @@
 {
-    "name": "it-yakutia//yii2-rbac",
+    "name": "it-yakutia/yii2-rbac",
     "description": "Role Based Access Controll for yii2",
     "type": "yii2-extension",
     "keywords": ["yii2","extension"," rbac"],
