@@ -3,8 +3,12 @@
 namespace ityakutia\rbac\models;
 
 use Yii;
+use common\models\User as BaseUser;
 
-class User extends \common\models\User
+class User extends BaseUser
 {
-	
+    public function getPassword()
+    {
+        return '';
+    }
 }

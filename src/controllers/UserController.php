@@ -85,6 +85,29 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionCreate()
+    {
+        $model = new User();
+        $post = Yii::$app->request->post();
+
+        if(!empty($post)){
+            $model->email = $post['User']['email'];
+            $model->username = $post['User']['email'];
+            $model->password = $post['User']['password'];
+                $model->generateAuthKey();
+                $model->status = 10;
+                if($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
+                    return $this->redirect(['index']);
+                }
+        }
+
+
+        return $this->render('create', [
+            'model' => $model
+        ]);
+    }
+
     protected function findModel($id)
     {
         if (($model = User::find()->where(['id' => $id])->one()) !== null) {
