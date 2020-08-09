@@ -18,7 +18,7 @@ class PermissionController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
@@ -27,7 +27,7 @@ class PermissionController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -41,7 +41,8 @@ class PermissionController extends Controller
         $namefilter = Yii::$app->request->getQueryParam('filtername', '');
 
         $searchModel = ['name' => $namefilter, 'description' => $descriptionfilter];
-        $dataProvider = PermissionForm::all();
+        $model = new PermissionForm();
+        $dataProvider = $model->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -90,12 +91,8 @@ class PermissionController extends Controller
         if (PermissionForm::delete($name)) {
             Yii::$app->session->setFlash('success', 'Право успешно удален.');
             return $this->redirect(['index']);
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', 'Ошибка!');
         }
-                
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 }
