@@ -90,9 +90,10 @@ class PermissionController extends Controller
     {
         if (PermissionForm::delete($name)) {
             Yii::$app->session->setFlash('success', 'Право успешно удален.');
-            return $this->redirect(['index']);
         } else {
             Yii::$app->session->setFlash('error', 'Ошибка!');
         }
+
+        return $this->redirect(['index']);
     }
 }
