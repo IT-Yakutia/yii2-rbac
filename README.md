@@ -30,7 +30,16 @@ php yii migrate --migrationPath=@yii/rbac/migrations
 Usage
 -----
 
-Once the extension is installed, simply use it in your code by adding url on your navigation bar:
+Once the extension is installed, simply set application id in your `backend` config:
+
+```php
+return [
+    'id' => 'backend',
+    ...
+];
+```
+
+Simply use it in your code by adding url on your navigation bar:
 
 ```php
 Url::toRoute('/rbac/permission/index');

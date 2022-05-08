@@ -14,7 +14,7 @@ class AssignmentForm extends Model
 	public function rules()
     {
     	return [
-            [['user_id'], 'exist', 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             [['user_roles'], 'each', 'rule' => ['string'], 'skipOnEmpty' => true],
     	];
     }

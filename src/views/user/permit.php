@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\User */
+/* @var yii\web\View $this */
+/* @var ityakutia\rbac\models\AssignmentForm $model */
+/* @var common\models\User $user */
 
 $this->title = $user->username;
 // $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];

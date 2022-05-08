@@ -2,11 +2,10 @@
 
 namespace ityakutia\rbac\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class UserSearch extends User
+class UserSearch extends \common\models\User
 {
     /**
      * @inheritdoc
@@ -37,7 +36,7 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
+        $query = self::find();
 
         // add conditions that should always apply here
 

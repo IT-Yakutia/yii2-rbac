@@ -21,5 +21,16 @@
         "psr-4": {
             "ityakutia\\rbac\\": "src"
         }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
     }
 }

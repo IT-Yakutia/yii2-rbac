@@ -1,13 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use yii\helpers\ArrayHelper;
 
-/* @var $this yii\web\View */
-/* @var $model ityakutia\blog\models\Article */
-/* @var $form yii\widgets\ActiveForm */
+/* @var yii\web\View $this */
+/* @var ityakutia\rbac\models\RoleForm $model */
 ?>
 
 <div class="role-form">

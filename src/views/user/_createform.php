@@ -3,8 +3,8 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
-/* @var $model ityakutia\rbac\models\User */
-/* @var $form yii\widgets\ActiveForm */
+/* @var yii\web\View $this */
+/* @var ityakutia\rbac\models\CreateUserForm $model */
 ?>
 
 <div class="new-user-form">
@@ -12,6 +12,8 @@ use yii\helpers\Html;
     <?php $form = ActiveForm::begin([
         'errorCssClass' => 'red-text',
     ]); ?>
+
+    <?= $form->field($model, 'username')->textInput() ?>
 
     <?= $form->field($model, 'email')->input('email') ?>
 

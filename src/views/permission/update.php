@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model ityakutia\blog\models\Article */
+/* @var $model ityakutia\rbac\models\PermissionForm */
 
 $this->title = 'Редактирование: ' . $model->name;
 // $this->params['breadcrumbs'][] = ['label' => 'Articles', 'url' => ['index']];

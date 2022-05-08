@@ -2,13 +2,7 @@
 
 namespace ityakutia\rbac;
 
-use yii\base\Module as BaseModule;
-
-class Module extends BaseModule
+class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'ityakutia\rbac\controllers';
-    
-    public function init(){
-        parent::init();
-    }
 }

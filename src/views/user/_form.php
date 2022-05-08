@@ -4,6 +4,8 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
+/* @var yii\web\View $this */
+
 $this->title = 'Изменить пароль';
 // $this->params['breadcrumbs'][] = $this->title;
 

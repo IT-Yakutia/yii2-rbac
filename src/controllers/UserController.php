@@ -2,8 +2,9 @@
 
 namespace ityakutia\rbac\controllers;
 
+use common\models\User;
+use ityakutia\rbac\models\CreateUserForm;
 use Yii;
-use ityakutia\rbac\models\User;
 use ityakutia\rbac\models\UserSearch;
 use ityakutia\rbac\models\AssignmentForm;
 use yii\web\Controller;
@@ -87,21 +88,14 @@ class UserController extends Controller
 
     public function actionCreate()
     {
-        $model = new User();
-        $post = Yii::$app->request->post();
+	    $model = new CreateUserForm();
 
-        if(!empty($post)){
-            $model->email = $post['User']['email'];
-            $model->username = $post['User']['email'];
-            $model->password = $post['User']['password'];
-                $model->generateAuthKey();
-                $model->status = 10;
-                if($model->save()) {
-                    Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
-                    return $this->redirect(['index']);
-                }
-        }
-
+		if (Yii::$app->request->isPost) {
+			if ($model->load(Yii::$app->request->post()) && $model->createUser()) {
+				Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
+				return $this->redirect(['index']);
+			}
+		}
 
         return $this->render('create', [
             'model' => $model
