@@ -8,38 +8,66 @@ Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
 Either run
-
 ```
 php composer.phar require --prefer-dist it-yakutia/yii2-rbac "*"
 ```
-
 or add
-
 ```
 "it-yakutia/yii2-rbac": "*"
 ```
-
 to the require section of your `composer.json` file.
 
-Models use yii2 DbManager class and required to run migration:
-
+Add Module in backend config `main.php`:
 ```
-php yii migrate --migrationPath=@yii/rbac/migrations
+return [
+    ...
+    'modules' => [
+        ...
+        'rbac' => \ityakutia\rbac\Module::class,
+        ...
+    ],
+    ...
+];
+```
+
+Add Component `authManager` in common config `main.php`:
+```php
+return [
+    ...
+    'components' => [
+        ...
+	    'authManager' => [
+		    'class' => \yii\rbac\DbManager::class,
+	    ],
+	    ...
+    ],
+    ...
+];
+```
+
+In console config `main.php` add `migrationPath` value in `controllerMap` `migration` section:
+```php
+return [
+    ...
+    'controllerMap' => [
+        ...
+	    'migrate' => [
+		    'class' => \yii\console\controllers\MigrateController::class,
+		    'migrationPath' => [
+				'@console/migrations',
+				...
+			    '@yii/rbac/migrations',
+			    ...
+		    ],
+	    ],
+    ],
 ```
 
 Usage
 -----
 
-Once the extension is installed, simply set application id in your `backend` config:
 
-```php
-return [
-    'id' => 'backend',
-    ...
-];
-```
-
-Simply use it in your code by adding url on your navigation bar:
+Simply use it in your backend code by adding url on your navigation bar:
 
 ```php
 Url::toRoute('/rbac/permission/index');
@@ -47,4 +75,4 @@ Url::toRoute('/rbac/role/index');
 Url::toRoute('/rbac/user/index');
 ```
 
-This controllers are allowed for `admin` role
+Controllers are allowed for user with permissions: `rbac_permissions`, `rbac_roles`, `rbac_users`

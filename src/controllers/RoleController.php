@@ -2,32 +2,34 @@
 
 namespace ityakutia\rbac\controllers;
 
+use ityakutia\rbac\models\RoleForm;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use ityakutia\rbac\models\RoleForm;
 
 /**
  * CatalogController implements the CRUD actions for Catalog model.
  */
 class RoleController extends Controller
 {
-
-    public function behaviors()
+	/**
+	 * @inheritdoc
+	 */
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin']
+	                    'permissions' => ['rbac_roles']
                     ]
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -53,13 +55,13 @@ class RoleController extends Controller
     {
         $model = new RoleForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Роль успешно записана.');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка!');
-            }
+        if (
+			$model->load(Yii::$app->request->post())
+			&& $model->validate()
+            && $model->save()
+        ) {
+            Yii::$app->session->setFlash('success', 'Роль успешно записана.');
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -71,13 +73,13 @@ class RoleController extends Controller
     {
         $model = RoleForm::getPermit($name);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->update($name)) {
-                Yii::$app->session->setFlash('success', 'Роль успешно записана.');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка!');
-            }
+        if (
+			$model->load(Yii::$app->request->post())
+			&& $model->validate()
+            && $model->update($name)
+        ) {
+            Yii::$app->session->setFlash('success', 'Роль успешно записана.');
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -89,13 +91,10 @@ class RoleController extends Controller
     {
         if (RoleForm::delete($name)) {
             Yii::$app->session->setFlash('success', 'Роль успешно удалена.');
-            return $this->redirect(['index']);
         }else{
             Yii::$app->session->setFlash('error', 'Ошибка!');
         }
-                
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+
+	    return $this->redirect(['index']);
     }
 }

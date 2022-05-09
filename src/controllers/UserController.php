@@ -12,9 +12,6 @@ use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * CatalogController implements the CRUD actions for Catalog model.
- */
 class UserController extends Controller
 {
 
@@ -22,16 +19,16 @@ class UserController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin']
+	                    'permissions' => ['rbac_users']
                     ]
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -71,13 +68,13 @@ class UserController extends Controller
         $model = new AssignmentForm();
         $model->user_id = $id;
         
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->updateAssignments()) {
-                Yii::$app->session->setFlash('success', 'Роли успешно изменены.');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка!');
-            }
+        if (
+			$model->load(Yii::$app->request->post())
+			&& $model->validate()
+            && $model->updateAssignments()
+        ) {
+            Yii::$app->session->setFlash('success', 'Роли успешно изменены.');
+	        return $this->redirect(['index']);
         }
 
         return $this->render('permit', [
@@ -90,11 +87,13 @@ class UserController extends Controller
     {
 	    $model = new CreateUserForm();
 
-		if (Yii::$app->request->isPost) {
-			if ($model->load(Yii::$app->request->post()) && $model->createUser()) {
-				Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
-				return $this->redirect(['index']);
-			}
+		if (
+			Yii::$app->request->isPost
+			&& $model->load(Yii::$app->request->post())
+			&& $model->createUser()
+		) {
+			Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
+			return $this->redirect(['index']);
 		}
 
         return $this->render('create', [
