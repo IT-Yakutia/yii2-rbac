@@ -1,6 +1,7 @@
 <?php
 
-/* @var $model ityakutia\rbac\models\User */
+/* @var yii\web\View $this */
+/* @var ityakutia\rbac\models\CreateUserForm $model */
 
 $this->title = 'Новый пользователь';
 ?>

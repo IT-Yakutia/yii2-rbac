@@ -1,10 +1,7 @@
 <?php
 
-use yii\helpers\Html;
-
-
-/* @var $this yii\web\View */
-/* @var $model ityakutia\blog\models\Article */
+/* @var yii\web\View $this */
+/* @var ityakutia\rbac\models\PermissionForm $model */
 
 $this->title = 'Новые права';
 // $this->params['breadcrumbs'][] = ['label' => 'Articles', 'url' => ['index']];

@@ -2,8 +2,9 @@
 
 namespace ityakutia\rbac\controllers;
 
+use common\models\User;
+use ityakutia\rbac\models\CreateUserForm;
 use Yii;
-use ityakutia\rbac\models\User;
 use ityakutia\rbac\models\UserSearch;
 use ityakutia\rbac\models\AssignmentForm;
 use yii\web\Controller;
@@ -11,9 +12,6 @@ use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * CatalogController implements the CRUD actions for Catalog model.
- */
 class UserController extends Controller
 {
 
@@ -21,16 +19,16 @@ class UserController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin']
+	                    'permissions' => ['rbac_users']
                     ]
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -70,13 +68,13 @@ class UserController extends Controller
         $model = new AssignmentForm();
         $model->user_id = $id;
         
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->updateAssignments()) {
-                Yii::$app->session->setFlash('success', 'Роли успешно изменены.');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка!');
-            }
+        if (
+			$model->load(Yii::$app->request->post())
+			&& $model->validate()
+            && $model->updateAssignments()
+        ) {
+            Yii::$app->session->setFlash('success', 'Роли успешно изменены.');
+	        return $this->redirect(['index']);
         }
 
         return $this->render('permit', [
@@ -87,21 +85,16 @@ class UserController extends Controller
 
     public function actionCreate()
     {
-        $model = new User();
-        $post = Yii::$app->request->post();
+	    $model = new CreateUserForm();
 
-        if(!empty($post)){
-            $model->email = $post['User']['email'];
-            $model->username = $post['User']['email'];
-            $model->password = $post['User']['password'];
-                $model->generateAuthKey();
-                $model->status = 10;
-                if($model->save()) {
-                    Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
-                    return $this->redirect(['index']);
-                }
-        }
-
+		if (
+			Yii::$app->request->isPost
+			&& $model->load(Yii::$app->request->post())
+			&& $model->createUser()
+		) {
+			Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
+			return $this->redirect(['index']);
+		}
 
         return $this->render('create', [
             'model' => $model

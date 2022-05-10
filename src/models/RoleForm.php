@@ -4,13 +4,11 @@ namespace ityakutia\rbac\models;
 
 use Yii;
 use yii\base\Model;
+use yii\db\IntegrityException;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
 use yii\rbac\Item;
 
-/**
- * ContactForm is the model behind the contact form.
- */
 class RoleForm extends Model
 {
     public $name;
@@ -23,6 +21,8 @@ class RoleForm extends Model
         return [
             [['name'], 'required'],
             [['name', 'description'], 'string'],
+	        [['name', 'description'], 'trim', 'skipOnEmpty' => true],
+	        [['name', 'description'], 'filter', 'skipOnEmpty' => true, 'filter' => function($value) { return strip_tags($value); }],
             ['children', 'each', 'rule' => ['string'], 'skipOnEmpty' => true],
         ];
     }
@@ -89,8 +89,20 @@ class RoleForm extends Model
         $auth = Yii::$app->authManager;
         $role = $auth->createRole($this->name);
         $role->description = $this->description;
-        $auth->add($role);
-        return $this->updateChildren();
+
+		$tr = Yii::$app->getDb()->beginTransaction();
+		$result = false;
+		try {
+			$result = $auth->add($role) && $this->updateChildren();
+			$tr->commit();
+		} catch(IntegrityException $exception) {
+			$tr->rollBack();
+			$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', ['attribute' => $this->getAttributeLabel('name'), 'value' => $this->name]));
+		} catch (\Throwable $exception) {
+			$tr->rollBack();;
+		}
+
+		return $result;
     }
 
     public function update($name)
@@ -99,8 +111,20 @@ class RoleForm extends Model
         $role = $auth->getRole($name);
         $role->name = $this->name;
         $role->description = $this->description;
-        $auth->update($name, $role);
-        return $this->updateChildren();
+
+	    $tr = Yii::$app->getDb()->beginTransaction();
+	    $result = false;
+	    try {
+		    $result = $auth->update($name, $role) && $this->updateChildren();
+		    $tr->commit();
+	    } catch(IntegrityException $exception) {
+		    $tr->rollBack();
+		    $this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', ['attribute' => $this->getAttributeLabel('name'), 'value' => $this->name]));
+	    } catch (\Throwable $exception) {
+		    $tr->rollBack();
+	    }
+
+		return $result;
     }
 
     static function getPermit($name)
@@ -117,8 +141,17 @@ class RoleForm extends Model
     {
         $auth = Yii::$app->authManager;
         $role = $auth->getRole($name);
-        
-        return $auth->remove($role);
+
+	    $tr = Yii::$app->getDb()->beginTransaction();
+	    $result = false;
+	    try {
+		    $result = $auth->remove($role);
+		    $tr->commit();
+	    } catch (\Throwable $exception) {
+		    $tr->rollBack();
+	    }
+
+	    return $result;
     }
 
 
@@ -179,7 +212,7 @@ class RoleForm extends Model
                 }
             }
         }else{
-            return $this->removeChildren($this->name);
+            $this->removeChildren($this->name);
         }
         return true;
     }

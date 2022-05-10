@@ -2,19 +2,21 @@
 
 namespace ityakutia\rbac\controllers;
 
+use ityakutia\rbac\models\PermissionForm;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use ityakutia\rbac\models\PermissionForm;
 
 /**
  * CatalogController implements the CRUD actions for Catalog model.
  */
 class PermissionController extends Controller
 {
-
-    public function behaviors()
+	/**
+	 * @inheritdoc
+	 */
+    public function behaviors(): array
     {
         return [
             'access' => [
@@ -22,7 +24,7 @@ class PermissionController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin']
+	                    'permissions' => ['rbac_permissions']
                     ]
                 ],
             ],
@@ -54,13 +56,13 @@ class PermissionController extends Controller
     {
         $model = new PermissionForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Права успешно записаны.');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка!');
-            }
+        if (
+			$model->load(Yii::$app->request->post())
+			&& $model->validate()
+            && $model->save()
+        ) {
+            Yii::$app->session->setFlash('success', 'Права успешно записаны.');
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -72,13 +74,13 @@ class PermissionController extends Controller
     {
         $model = PermissionForm::getPermit($name);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->update($name)) {
-                Yii::$app->session->setFlash('success', 'Права успешно записаны.');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка!');
-            }
+        if (
+			$model->load(Yii::$app->request->post())
+			&& $model->validate()
+            && $model->update($name)
+        ) {
+            Yii::$app->session->setFlash('success', 'Права успешно записаны.');
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

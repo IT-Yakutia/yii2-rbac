@@ -1,6 +1,6 @@
 {
     "name": "it-yakutia/yii2-rbac",
-    "description": "Role Based Access Controll for yii2",
+    "description": "Role Based Access Control for yii2",
     "type": "yii2-extension",
     "keywords": ["yii2","extension"," rbac"],
     "license": "MIT",
@@ -14,12 +14,20 @@
         "yiisoft/yii2": "~2.0.0",
         "uraankhayayaal/yii2-materializecomponents": "*"
     },
-    "extra": {
-        "bootstrap": "ityakutia\\rbac\\Bootstrap"
-    },
     "autoload": {
         "psr-4": {
             "ityakutia\\rbac\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     }
 }

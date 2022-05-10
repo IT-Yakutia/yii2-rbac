@@ -4,6 +4,7 @@ namespace ityakutia\rbac\models;
 
 use Yii;
 use yii\base\Model;
+use yii\db\IntegrityException;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
 use yii\rbac\Item;
@@ -21,6 +22,8 @@ class PermissionForm extends Model
         return [
             [['name'], 'required'],
             [['name', 'description'], 'string'],
+            [['name', 'description'], 'trim', 'skipOnEmpty' => true],
+            [['name', 'description'], 'filter', 'skipOnEmpty' => true, 'filter' => function($value) { return strip_tags($value); }],
         ];
     }
 
@@ -64,7 +67,11 @@ class PermissionForm extends Model
         $auth = Yii::$app->authManager;
         $permission = $auth->createPermission($this->name);
         $permission->description = $this->description;
-        return $auth->add($permission);
+		try {
+			return $auth->add($permission);
+		} catch (IntegrityException $exception) {
+			$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', ['attribute' => $this->getAttributeLabel('name'), 'value' => $this->name]));
+		}
     }
 
     public function update($name)
@@ -73,7 +80,13 @@ class PermissionForm extends Model
         $permission = $auth->getPermission($name);
         $permission->name = $this->name;
         $permission->description = $this->description;
-        return $auth->update($name, $permission);
+		try {
+			return $auth->update($name, $permission);
+		} catch(IntegrityException $exception) {
+			$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', ['attribute' => $this->getAttributeLabel('name'), 'value' => $this->name]));
+		}
+
+		return false;
     }
 
     static function getPermit($name)

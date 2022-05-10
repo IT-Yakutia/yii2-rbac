@@ -1,10 +1,7 @@
 <?php
 
-use yii\helpers\Html;
-
-
-/* @var $this yii\web\View */
-/* @var $model common\modules\blog\models\Article */
+/* @var yii\web\View $this */
+/* @var ityakutia\rbac\models\RoleForm $model */
 
 $this->title = 'Новая роль';
 // $this->params['breadcrumbs'][] = ['label' => 'Articles', 'url' => ['index']];
