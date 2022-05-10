@@ -8,17 +8,17 @@ Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
 Either run
-```
+```shell
 php composer.phar require --prefer-dist it-yakutia/yii2-rbac "*"
 ```
 or add
-```
+```json lines
 "it-yakutia/yii2-rbac": "*"
 ```
 to the require section of your `composer.json` file.
 
 Add Module in backend config `main.php`:
-```
+```php
 return [
     ...
     'modules' => [
