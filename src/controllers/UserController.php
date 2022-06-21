@@ -92,14 +92,17 @@ class UserController extends Controller
 
         if(!empty($post)){
             $model->email = $post['User']['email'];
-            $model->username = $post['User']['email'];
+            if ($model->hasAttribute('phone'))
+                $model->phone = $post['User']['phone'];
+            $model->username = $post['User']['username'];
             $model->password = $post['User']['password'];
-                $model->generateAuthKey();
-                $model->status = 10;
-                if($model->save()) {
-                    Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
-                    return $this->redirect(['index']);
-                }
+            $model->setPassword($model->password);
+            $model->generateAuthKey();
+            $model->status = 10;
+            if($model->save()) {
+                Yii::$app->session->setFlash('success', 'Пользователь успешно создан!');
+                return $this->redirect(['index']);
+            }
         }
 
 

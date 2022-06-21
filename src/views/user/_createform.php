@@ -13,7 +13,11 @@ use yii\helpers\Html;
         'errorCssClass' => 'red-text',
     ]); ?>
 
-    <?= $form->field($model, 'email')->input('email') ?>
+    <?= $form->field($model, 'email')->textInput() ?>
+
+    <?= $form->field($model, 'username')->textInput() ?>
+
+    <?= $model->hasAttribute('phone') ? $form->field($model, 'phone')->textInput() : null ?>
 
     <?= $form->field($model, 'password')->textInput(['maxlength' => true]) ?>
 
