@@ -22,7 +22,7 @@ class PermissionController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin']
+                        'roles' => ['admin', 'rbac_permissions']
                     ]
                 ],
             ],
